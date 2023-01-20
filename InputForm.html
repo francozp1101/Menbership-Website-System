@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menbership Website-Form</title>
+<style>
+form#multiphase{ border:#000 1px solid; padding:24px; width:350px; }
+form#multiphase > #phase2, #phase3, #show_all_data{ display:none; }
+</style>
+<script>
+  // declaracion de las variables que contendran los valores que ingrese el usuario
+var fname, lname, gender, country;
+
+  // cursor que apunte los id y class de c/etiqueta div
+function _(x){
+	return document.getElementById(x);
+}
+
+function processPhase1(){
+	fname = _("firstname").value;
+	lname = _("lastname").value;
+	if(fname.length > 2 && lname.length > 2){
+		_("phase1").style.display = "none";
+		_("phase2").style.display = "block";
+		_("progressBar").value = 33;
+		_("status").innerHTML = "Phase 2 of 3";
+	} else {
+	    alert("Please fill in the fields");	
+	}
+}
+
+function processPhase2(){
+	gender = _("gender").value;
+	if(gender.length > 0){
+		_("phase2").style.display = "none";
+		_("phase3").style.display = "block";
+		_("progressBar").value = 66;
+		_("status").innerHTML = "Phase 3 of 3";
+	} else {
+	    alert("Please choose your gender");	
+	}
+}
+
+function processPhase3(){
+	country = _("country").value;
+	if(country.length > 0){
+		_("phase3").style.display = "none";
+		_("show_all_data").style.display = "block";
+		_("display_fname").innerHTML = fname;
+		_("display_lname").innerHTML = lname;
+		_("display_gender").innerHTML = gender;
+		_("display_country").innerHTML = country;
+		_("progressBar").value = 100;
+		_("status").innerHTML = "Information Overview";
+	} else {
+	    alert("Please choose your country");	
+	}
+}
+
+//último evento (POST). Para termina el proceso de completado del formulario y eviarlo al server. (PHP)
+function submitForm(){
+	_("multiphase").method = "post";
+	_("multiphase").action = "aqui_parseo.php";
+	_("multiphase").submit();
+}
+
+</script>
+</head>
+<body>
+<progress id="progressBar" value="0" max="100" style="width:250px;"></progress>
+<h3 id="status">Phase 1 of 3</h3>
+<form id="multiphase" onsubmit="return false">
+
+  <!-- primeros inputs -->
+  <div id="phase1">
+    First Name: <input id="firstname" name="firstname"><br>
+    <br />
+    Last Name: <input id="lastname" name="lastname"><br>
+    <br />
+ 
+    <button onclick="processPhase1()">Continue</button>
+  </div>
+
+  <!-- selecionador de género y fecha de nacimiento -->
+  <div id="phase2">
+    Gender: <select id="gender" name="gender">
+ 
+      <option value="m">Male</option>
+      <option value="f">Female</option>
+    </select><br>
+    <br />
+
+    Birth Date: <input type="date" name="field1" id="field1" /><br /><br />
+    <button onclick="processPhase2()">Continue</button>
+  </div>
+  
+    <!-- Selecionador de paises  (hometown) -->
+  <div id="phase3">
+    Country: <select id="country" name="country">
+      <option value="Brasil">Brasil</option>
+      <option value="Ecuador">Ecuador</option>
+      <option value="Peru">Perú</option>
+      <option value="Argentina">Argentina</option>
+      <option value="Chile">Chile</option>
+    </select><br>
+    <br />
+    <button onclick="processPhase3()">Continue</button>
+  </div>
+
+   <!-- main xml/activity/layout  -->
+  <div id="show_all_data">
+    
+    First Name: <span id="display_fname"></span> <br>
+    <br />
+    Last Name: <span id="display_lname"></span> <br>
+    <br />
+    Gender: <span id="display_gender"></span> <br>
+    <br />
+    Country: <span id="display_country"></span> <br>
+    <br />
+    <button onclick="submitForm()">Submit Data</button>
+  </div>
+
+
+  
+</form>
+</body>
+</html>
